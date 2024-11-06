@@ -66,7 +66,7 @@ def on_button1_click():
     dfs_obj = dfs_solver()
     path = dfs_obj.solve(maze, *start, *end)
     animate_path(path)
-    step_label.config(text=f'宽度优先花费步数:{len(path)}')
+    step_label.config(text=f'深度优先花费步数:{len(path)}')
   
 def on_button2_click():  
     bfs_obj = bfs_solver()

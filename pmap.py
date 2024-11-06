@@ -21,7 +21,8 @@ def generate_pmap(width, height, max_block_num, s_x, s_y, f_x, f_y):
                 continue
             else:
                 pmap[n_y, n_x] = 0
-                break
+                if n > width * height / 2:
+                    break
     pmap[f_y,f_x] = 123 # 表示终点
     return pmap
         
@@ -50,12 +51,38 @@ def is_link(pmap, s_x, s_y, f_x, f_y):
         return False
     return dfs(s_x,s_y)
 
+# def corner_linked(pmap, s_x, s_y, f_x, f_y):
+#     (height, width) = pmap.shape
+#     for f in [[1,1],[width//2,height//2],[1,height-2],[width-2,1],[width-2,height-2],[f_x,f_y]]:
+#         if not is_link(pmap,s_x,s_y,*f):
+#             return False
+#     return True
+
 def corner_linked(pmap, s_x, s_y, f_x, f_y):
     (height, width) = pmap.shape
-    for f in [[1,1],[1,height-2],[width-2,1],[width-2,height-2],[f_x,f_y]]:
-        if not is_link(pmap,s_x,s_y,*f):
+    roadqueue = []
+    def is_valid(x, y, move):
+        x += move[0]
+        y += move[1]
+        return x >= 0 and x < pmap.shape[1]\
+            and y >=0 and y < pmap.shape[0]\
+            and visited[y,x]==False and pmap[y,x] != 1
+    visited = np.zeros_like(pmap,dtype=np.bool_)
+    roadqueue.append([s_x,s_y])
+    visited[s_y,s_x] = 1
+    while roadqueue:
+        x,y = roadqueue.pop(0)
+        # visited[y,x] = 1
+        for move in MOVES:
+            if is_valid(x, y, move):
+                visited[y+move[1],x+move[0]] = 1
+                roadqueue.append([x+move[0],y+move[1]])
+
+    for f in [[1,1],[width//2,height//2],[1,height-2],[width-2,1],[width-2,height-2],[f_x,f_y]]:
+        if not visited[f[1],f[0]]:
             return False
     return True
+
 
 def guarantee_roadnum(pmap, s_x, s_y, f_x, f_y, roadnum):
     def dfs(x, y, cnt):
