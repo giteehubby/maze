@@ -1,7 +1,7 @@
 import numpy as np
 import random
 
-MOVES = [(1,0),(0,1),(-1,0),(0,-1)]
+from constant import MOVES
 
 def generate_pmap(width, height, max_block_num, s_x, s_y, f_x, f_y):
     max_block_num = min(height * width - 2, max_block_num)
