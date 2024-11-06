@@ -9,7 +9,7 @@ def generate_pmap(width, height, max_block_num, s_x, s_y, f_x, f_y):
     n = 0
     while n < max_block_num:
         new_block = random.randint(0,height * width -1)
-        if new_block == s_x * width + s_y or new_block == f_x * width + f_y:
+        if new_block == s_y * width + s_x or new_block == f_y * width + f_x:
             continue
         n_y = new_block // width
         n_x = new_block % width
@@ -22,7 +22,7 @@ def generate_pmap(width, height, max_block_num, s_x, s_y, f_x, f_y):
             else:
                 pmap[n_y, n_x] = 0
                 break
-    pmap[height-1,width-1] = 123 # 表示终点
+    pmap[f_y,f_x] = 123 # 表示终点
     return pmap
         
 def is_link(pmap, s_x, s_y, f_x, f_y):

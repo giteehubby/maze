@@ -65,6 +65,8 @@ class Alfa_Beta_Search:
             jerry_p = movep(jerry_p,move)
             v2,a = self.min_v(jerry_p,tom_p,alfa,beta,recursive_h+1)
             print('v2:'+str(v2))
+            if v2 is None:
+                v2 = 0
             if v2 > v:
                 v = v2
                 bestmove = move
