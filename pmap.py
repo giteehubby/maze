@@ -78,7 +78,9 @@ def corner_linked(pmap, s_x, s_y, f_x, f_y):
                 visited[y+move[1],x+move[0]] = 1
                 roadqueue.append([x+move[0],y+move[1]])
 
-    for f in [[1,1],[width//2,height//2],[1,height-2],[width-2,1],[width-2,height-2],[f_x,f_y]]:
+    corners = [[1,1],[width//2,height//2],[1,height-2],[width-2,1],[width-2,height-2],[f_x,f_y],
+               [0,height//2],[width//2,0],[width-1,height//2],[width//2,height-1]] # 四边中点
+    for f in corners:
         if not visited[f[1],f[0]]:
             return False
     return True
@@ -122,8 +124,8 @@ def narrow(maze, s_x, s_y, f_x, f_y):
                 p = random.randint(0,3)
                 for _ in range(4):
                     maze[i+p//2][j+p%2] = 1
-                    satisfy = True
-                    if satisfy and is_link(maze, s_x, s_y, f_x, f_y):
+                    
+                    if is_link(maze, s_x, s_y, f_x, f_y):
                         break
                     maze[i+p//2][j+p%2] = 0
                     p = (p + 1) % 4
@@ -192,6 +194,7 @@ def narrow3(maze, s_x, s_y, f_x, f_y):
 def trap(maze, s_x, s_y, f_x, f_y,num_trap=4):
     i = 0
     height,width = maze.shape
+    num_trap = height * width // 8
     while i < num_trap:
         trap_block = random.randint(0,height * width -1)
         if trap_block == s_x * width + s_y or trap_block == f_x * width + f_y:

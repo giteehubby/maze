@@ -19,8 +19,20 @@ maze = np.zeros((num_col,num_row),dtype= np.uint8)
 have_tom = False
 pi = None
 polies = []
+ids = []
+id1s = []
 
 def animate_path(road,id=None,tom_road=None,id1=None):
+    # global ids
+    # global id1s
+    # if len(ids):
+    #     for id in ids:
+    #         canvas.delete(id)
+    #     ids = []
+    # if len(id1s):
+    #     for id in id1s:
+    #         canvas.delete(id)
+    #     id1s = []
     if tom_road is None:
         if road:
             canvas_width = canvas.winfo_width()  
@@ -30,10 +42,11 @@ def animate_path(road,id=None,tom_road=None,id1=None):
     
             x, y = road.pop(0)
             if id is not None:
-                # pass
-                canvas.delete(id)
+                pass
+                # canvas.delete(id)
             id = canvas.create_oval(x * cell_width + cell_width // 4, y * cell_height + cell_height // 4,  
                                (x + 1) * cell_width - cell_width // 4, (y + 1) * cell_height - cell_height // 4, fill="red")
+            ids.append(id)
             root.after(500, lambda :animate_path(road,id))  # 500毫秒后调用自己  
         else:  
             # 可以在这里添加到达终点的处理，比如显示一个消息或改变终点颜色  
@@ -57,6 +70,8 @@ def animate_path(road,id=None,tom_road=None,id1=None):
                                (x + 1) * cell_width - cell_width // 4, (y + 1) * cell_height - cell_height // 4, fill="red")
             id1 = canvas.create_oval(x_1 * cell_width + cell_width // 4, y_1 * cell_height + cell_height // 4,  
                                (x_1 + 1) * cell_width - cell_width // 4, (y_1 + 1) * cell_height - cell_height // 4, fill="blue")
+            ids.append(id)
+            id1s.append(id1)
             root.after(500, lambda :animate_path(road,id,tom_road,id1))  # 500毫秒后调用自己  
         else:  
             # 可以在这里添加到达终点的处理，比如显示一个消息或改变终点颜色  
@@ -288,7 +303,7 @@ def uncertain_button_click():
         return
     
     global maze
-    maze = generate_pmap(num_col,num_row, 1000, *start, *end)
+    maze = generate_pmap(num_col,num_row, num_col*num_row//7, *start, *end)
     maze = trap(maze,*start,*end)
 
     component_replace()
@@ -349,7 +364,7 @@ label2.grid(column=1, row=5, sticky='w', padx=10, pady=10)
 label3 = tk.Label(root, text="请输入起点横坐标:")  
 label3.grid(column=0, row=7, sticky='w', padx=10, pady=10)
 label4 = tk.Label(root, text="请输入起点纵坐标:")  
-label4.grid(column=2, row=7, sticky='w', padx=10, pady=10)
+label4.grid(column=1, row=7, sticky='w', padx=10, pady=10)
 
 label5 = tk.Label(root, text="请输入终点横坐标:")  
 label5.grid(column=2, row=7, sticky='w', padx=10, pady=10)
