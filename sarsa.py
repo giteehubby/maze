@@ -26,8 +26,8 @@ class Sarsa:
     def update(self,action,x,y,reward,x1,y1):
         action1 = self.take_action(x1, y1)
         td_error = reward + self.gamma * self.Q[x1+y1*self.num_col][action1]\
-                                 - self.Q[x+y*self.num_col]
-        self.Q[x+y*self.num_col] += self.alfa * td_error
+                                 - self.Q[x+y*self.num_col][action]
+        self.Q[x+y*self.num_col][action] += self.alfa * td_error
         
     def is_valid(self, move, x, y):
         return x + move[0] >=0 and x + move[0] < self.num_col\

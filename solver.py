@@ -1,10 +1,10 @@
 # from lose_palace import MOVES,CELL_SIZE
 import tkinter as tk
 import numpy as np
+from constant import MOVES
 
 MAZE_SIZE = (30, 20)  
 CELL_SIZE = 20
-MOVES = [(1,0),(0,1),(-1,0),(0,-1)]
 
 class solver:
     def __init__(self):

@@ -82,7 +82,7 @@ class Value_Iteration:
 
     
     def get_policy(self):
-        for i in range(self.n_col * self.n_col-1): #终点不参与策略迭代
+        for i in range(self.n_row * self.n_col-1): #终点不参与策略迭代
             if self.is_wall(i):
                 continue
             qsa_list = []

@@ -80,7 +80,7 @@ class Policy_Iteration:
         print('策略评估%d轮后完成'%cnt)
 
     def policy_improve(self):
-        for i in range(self.n_col * self.n_col-1): #终点不参与策略迭代
+        for i in range(self.n_row * self.n_col-1): #终点不参与策略迭代
             if self.is_wall(i):
                 continue
             qsa_list = []
