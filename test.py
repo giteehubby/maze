@@ -18,6 +18,7 @@ end = [num_col-1, num_row-1]
 maze = np.zeros((num_col,num_row),dtype= np.uint8)
 have_tom = False
 pi = None
+polies = []
 
 def animate_path(road,id=None,tom_road=None,id1=None):
     if tom_road is None:
@@ -137,9 +138,11 @@ def uncertain_button_click():
     global mapready
     mapready = True
 
-    global start, end
-    start = (0, 0)  
-    end = (num_col-1, num_row-1)
+    get_entry()
+    if not start_end_valid():
+        messagebox.showwarning("提示","起点或终点输入有误！")
+        return
+    
     global maze
     maze = generate_pmap(num_col,num_row, 1000, *start, *end)
     maze = trap(maze,*start,*end)
@@ -179,30 +182,37 @@ def draw_maze():
 
 def draw_pi(pi):
     canvas_width = canvas.winfo_width()  
-    canvas_height = canvas.winfo_height()  
+    canvas_height = canvas.winfo_height()
     # 计算每个单元格的尺寸（不包括padding）  
     cell_width = (canvas_width) // num_col
     cell_height = (canvas_height) // num_row
+    global polies
+    if len(polies):
+        for id in polies:
+            canvas.delete(id)
+        polies = []
+    
     for i,p in enumerate(pi):
         if maze[i//num_col][i%num_col] == 1:
             continue
         print(p)
         if  p[0] != 0:
-            canvas.create_polygon((i%num_col+0.67)*cell_width,(i//num_col+0.33)*cell_height,
+            id = canvas.create_polygon((i%num_col+0.67)*cell_width,(i//num_col+0.33)*cell_height,
                        (i%num_col+0.67)*cell_width,(i//num_col+0.67)*cell_height,
                        (i%num_col+1)*cell_width,(i//num_col+0.5)*cell_height)
         if  p[1] != 0:
-            canvas.create_polygon((i%num_col+0.33)*cell_width,(i//num_col+0.67)*cell_height,
+            id = canvas.create_polygon((i%num_col+0.33)*cell_width,(i//num_col+0.67)*cell_height,
                        (i%num_col+0.67)*cell_width,(i//num_col+0.67)*cell_height,
                        (i%num_col+0.5)*cell_width,(i//num_col+1)*cell_height)
         if  p[2] != 0:
-            canvas.create_polygon((i%num_col+0.33)*cell_width,(i//num_col+0.33)*cell_height,
+            id = canvas.create_polygon((i%num_col+0.33)*cell_width,(i//num_col+0.33)*cell_height,
                        (i%num_col+0.33)*cell_width,(i//num_col+0.67)*cell_height,
                        (i%num_col)*cell_width,(i//num_col+0.5)*cell_height)
         if  p[3] != 0:
-            canvas.create_polygon((i%num_col+0.33)*cell_width,(i//num_col+0.33)*cell_height,
+            id = canvas.create_polygon((i%num_col+0.33)*cell_width,(i//num_col+0.33)*cell_height,
                        (i%num_col+0.67)*cell_width,(i//num_col+0.33)*cell_height,
-                       (i%num_col+0.5)*cell_width,(i//num_col)*cell_height)            
+                       (i%num_col+0.5)*cell_width,(i//num_col)*cell_height)
+        polies.append(id)           
 
 def on_canvas_configure(event):  
     # 清除旧的网格  
